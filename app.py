@@ -11,10 +11,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 api = Api(app)
+api.app.config['RESTX_JSON'] = {'ensure_ascii' : False, 'indent': 4}
 
 movies_ns = api.namespace('movies')
 directors_ns = api.namespace('directors')
-genre_ns = api.namespace('genre')
+genres_ns = api.namespace('genres')
 
 
 class Movie(db.Model):
@@ -68,54 +69,54 @@ class GenreSchema(Schema):
 # movies_schema = MovieSchema(many=True)
 
 
-# @movies_ns.route('/')
-# class MovieView(Resource):
-#     def get(self):
-#         director_id = request.args.get('director_id')
-#         genre_id = request.args.get('genre_id')
-#
-#         if genre_id:
-#             movies = Movie.query.filter(Movie.director_id == director_id)
-#         elif director_id:
-#             movies = Movie.query.filter(Movie.genre_id == genre_id)
-#         else:
-#             movies = Movie.query.all()
-#         return MoviesSchema(many=True).dump(movies), 200
-#
-#     def post(self):
-#         req_json = request.json
-#         new_movie = Movie(**req_json)
-#         db.session.add(new_movie)
-#         db.session.commit()
-#         db.session.close()
-#
-#         return '', 204
-#
-#
-# @movies_ns.route('/<int:mid>')
-# class MovieView(Resource):
-#     def get_one(self, mid):
-#         movie = Movie.query.get(mid)
-#         return MoviesSchema().dump(movie), 200
-#
-#     def put(self, mid):
-#         req_json = request.json
-#         movie = Movie.query.get(mid)
-#
-#         movie.id = req_json['id']
-#         movie.title = req_json['title']
-#         movie.description = req_json['description']
-#         movie.trailer = req_json['trailer']
-#         movie.year = req_json['year']
-#         movie.rating = req_json['rating']
-#         movie.genre_id = req_json['genre_id']
-#         movie.director_id = req_json['director_id']
-#
-#     def delete(self, mid):
-#         movie = Movie.query.get(mid)
-#         db.session.delete(movie)
-#         db.session.commit()
-#         db.session.close()
+@movies_ns.route('/')
+class MovieView(Resource):
+    def get(self):
+        director_id = request.args.get('director_id')
+        genre_id = request.args.get('genre_id')
+
+        if genre_id:
+            movies = Movie.query.filter(Movie.director_id == director_id)
+        elif director_id:
+            movies = Movie.query.filter(Movie.genre_id == genre_id)
+        else:
+            movies = Movie.query.all()
+        return MoviesSchema(many=True).dump(movies), 200
+
+    def post(self):
+        req_json = request.json
+        new_movie = Movie(**req_json)
+        db.session.add(new_movie)
+        db.session.commit()
+        db.session.close()
+
+        return '', 204
+
+
+@movies_ns.route('/<int:mid>')
+class MovieView(Resource):
+    def get_one(self, mid):
+        movie = Movie.query.get(mid)
+        return MoviesSchema().dump(movie), 200
+
+    def put(self, mid):
+        req_json = request.json
+        movie = Movie.query.get(mid)
+
+        movie.id = req_json['id']
+        movie.title = req_json['title']
+        movie.description = req_json['description']
+        movie.trailer = req_json['trailer']
+        movie.year = req_json['year']
+        movie.rating = req_json['rating']
+        movie.genre_id = req_json['genre_id']
+        movie.director_id = req_json['director_id']
+
+    def delete(self, mid):
+        movie = Movie.query.get(mid)
+        db.session.delete(movie)
+        db.session.commit()
+        db.session.close()
 
 
 @directors_ns.route('/')
@@ -154,7 +155,7 @@ class DirectorsView(Resource):
         db.session.close()
 
 
-@genre_ns.route('/')
+@genres_ns.route('/')
 class GenresView(Resource):
     def get(self):
         genres = Genre.query.all()
@@ -170,7 +171,7 @@ class GenresView(Resource):
         return '', 204
 
 
-@genre_ns.route('/<int:gid>')
+@genres_ns.route('/<int:gid>')
 class GenresView(Resource):
     def get_one(self, gid):
         genre = Genre.query.get(gid)
