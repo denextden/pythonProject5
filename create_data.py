@@ -32,10 +32,12 @@ class Director(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
 
+
 class Genre(db.Model):
     __tablename__ = 'genre'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+
 
 db.drop_all()
 db.create_all()
@@ -50,8 +52,7 @@ data = {
         "rating": 8.6,
         "genre_id": 17,
         "director_id": 1,
-        "pk": 1
-    }, {
+        "pk": 1  }, {
         "title": "Омерзительная восьмерка",
         "description": "США после Гражданской войны. Легендарный охотник за головами Джон Рут по кличке Вешатель конвоирует заключенную. По пути к ним прибиваются еще несколько путешественников. Снежная буря вынуждает компанию искать укрытие в лавке на отшибе, где уже расположилось весьма пестрое общество: генерал конфедератов, мексиканец, ковбой… И один из них - не тот, за кого себя выдает.",
         "trailer": "https://www.youtube.com/watch?v=lmB9VWm0okU",
