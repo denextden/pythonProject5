@@ -95,7 +95,7 @@ class MovieView(Resource):
 
 @movies_ns.route('/<int:mid>')
 class MovieView(Resource):
-    def get_one(self, mid):
+    def get(self, mid):
         movie = Movie.query.get(mid)
         return MoviesSchema().dump(movie), 200
 
@@ -137,7 +137,7 @@ class DirectorsView(Resource):
 
 @directors_ns.route('/<int:did>')
 class DirectorsView(Resource):
-    def get_one(self, did):
+    def get(self, did):
         director = Director.query.get(did)
         return DirectorSchema().dump(director), 200
 
@@ -173,7 +173,7 @@ class GenresView(Resource):
 
 @genres_ns.route('/<int:gid>')
 class GenresView(Resource):
-    def get_one(self, gid):
+    def get(self, gid):
         genre = Genre.query.get(gid)
         return GenreSchema().dump(genre), 200
 
